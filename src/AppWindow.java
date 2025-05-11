@@ -42,29 +42,39 @@ public class AppWindow extends JFrame {
         startGenericPomodoroButton.setFocusable(false);
         startGenericPomodoroButton.setBackground(new Color(0x3F7C46));
         startGenericPomodoroButton.setForeground(Color.WHITE);
-        startGenericPomodoroButton.addActionListener(e -> this.run());
+        startGenericPomodoroButton.addActionListener(e -> this.runPomodoroTimer());
         this.add(startGenericPomodoroButton);
     }
+    private boolean isOnBreak = false;
 
-    public void run() {
+    public void runPomodoroTimer() {
         pomodoro.setFocusPeriodIndex(new AtomicInteger(0));
         FocusPeriod focusPeriod = pomodoro.getFocusPeriods().get(pomodoro.getFocusPeriodIndex().get());
         pomodoro.setCurrentDuration(focusPeriod.getSeconds());
+
         timer = new Timer(1000, (ActionEvent e) -> {
             if (pomodoro.getCurrentDuration() > 0) {
-                appTitle.setText(Integer.toString(pomodoro.getCurrentDuration()));
+                appTitle.setText(isOnBreak ? "Break: " + pomodoro.getCurrentDuration() : "Focus: " + pomodoro.getCurrentDuration());
                 pomodoro.setCurrentDuration(pomodoro.getCurrentDuration() - 1);
-                System.out.println(pomodoro.getCurrentDuration() + " seconds remaining in focus period");
+                System.out.println(pomodoro.getCurrentDuration() + (isOnBreak ? " seconds remaining in break" : " seconds remaining in focus period"));
             } else {
-                if (pomodoro.getFocusPeriodIndex().get() == pomodoro.getFocusPeriodsCount() - 1) {
-                    timer.stop();
-                    appTitle.setText("Desktop Pomodoro");
-                } else {
+                if (isOnBreak) {
                     pomodoro.incrementFocusPeriodIndex();
-                    pomodoro.setCurrentDuration(pomodoro.getFocusPeriods().get(pomodoro.getFocusPeriodIndex().get()).getSeconds());
+                    if (pomodoro.getFocusPeriodIndex().get() >= pomodoro.getFocusPeriodsCount()) {
+                        timer.stop();
+                        appTitle.setText("Desktop Pomodoro");
+                    } else {
+                        FocusPeriod nextPeriod = pomodoro.getFocusPeriods().get(pomodoro.getFocusPeriodIndex().get());
+                        pomodoro.setCurrentDuration(nextPeriod.getSeconds());
+                        isOnBreak = false;
+                    }
+                } else {
+                    pomodoro.setCurrentDuration(10); // Break time
+                    isOnBreak = true;
                 }
             }
         });
+
         timer.start();
     }
 }

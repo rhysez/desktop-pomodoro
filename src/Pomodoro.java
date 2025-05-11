@@ -11,37 +11,10 @@ public class Pomodoro {
     private int currentDuration;
     private boolean running;
     private AtomicInteger focusPeriodIndex;
+    private String state;
 
     public Pomodoro(ArrayList<FocusPeriod> focusPeriods) {
         this.focusPeriods = focusPeriods;
-    }
-
-    public void startPomodoroTimer() {
-        Timer timer = new Timer();
-        ArrayList<FocusPeriod> focusPeriods = this.focusPeriods;
-        AtomicInteger currentFocusPeriodIndex = new AtomicInteger(0);
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                FocusPeriod focusPeriod = focusPeriods.get(currentFocusPeriodIndex.get());
-                Pomodoro.this.setRunning(true);
-                Pomodoro.this.setCurrentDuration(focusPeriod.getSeconds());
-
-                if (Pomodoro.this.getCurrentDuration() > 0) {
-                    focusPeriod.setSeconds(focusPeriod.getSeconds() - 1);
-                } else {
-                    if (currentFocusPeriodIndex.get() == focusPeriods.size() - 1) {
-                        timer.cancel();
-                        Pomodoro.this.setRunning(false);
-                    } else {
-                        currentFocusPeriodIndex.incrementAndGet();
-                    }
-                }
-            }
-        };
-
-        timer.scheduleAtFixedRate(timerTask, 0, 1000);
     }
 
     public int getFocusPeriodsCount() {
@@ -98,5 +71,13 @@ public class Pomodoro {
 
     public void incrementFocusPeriodIndex() {
         this.focusPeriodIndex.incrementAndGet();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

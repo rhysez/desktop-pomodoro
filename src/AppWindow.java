@@ -8,8 +8,8 @@ public class AppWindow extends JFrame {
     public JLabel appTitle = new JLabel("Desktop Pomodoro");
     // Globals.
     ArrayList<FocusPeriod> focusPeriods = new ArrayList<FocusPeriod>() {{
-        add(new FocusPeriod(5));
-        add(new FocusPeriod(5));
+        add(new FocusPeriod(60 * 25));
+        add(new FocusPeriod(60 * 25));
     }};
     Pomodoro pomodoro = new Pomodoro(focusPeriods);
     JButton startGenericPomodoroButton = new JButton("Start Generic Pomodoro");
@@ -54,11 +54,14 @@ public class AppWindow extends JFrame {
 
         timer = new Timer(1000, (ActionEvent e) -> {
             if (pomodoro.getCurrentDuration() > 0) {
-                appTitle.setText(isOnBreak ? "Break: " + pomodoro.getCurrentDuration() : "Focus: " + pomodoro.getCurrentDuration());
+                appTitle.setText(
+                        isOnBreak ? "Break: " + pomodoro.getCurrentDuration() / 60 + " minutes" :
+                                "Focus: " + pomodoro.getCurrentDuration() / 60 + " minutes")
+                ;
                 pomodoro.setCurrentDuration(pomodoro.getCurrentDuration() - 1);
                 System.out.println(pomodoro.getCurrentDuration() + (isOnBreak ? " seconds remaining in break" : " seconds remaining in focus period"));
             } else {
-                if (isOnBreak) {
+                if (isOnBreak) { // We're on break at 0 seconds, time to move into next focus block.
                     pomodoro.incrementFocusPeriodIndex();
                     if (pomodoro.getFocusPeriodIndex().get() >= pomodoro.getFocusPeriodsCount()) {
                         timer.stop();
@@ -69,7 +72,7 @@ public class AppWindow extends JFrame {
                         isOnBreak = false;
                     }
                 } else {
-                    pomodoro.setCurrentDuration(10); // Break time
+                    pomodoro.setCurrentDuration(60 * 10); // Break time.
                     isOnBreak = true;
                 }
             }

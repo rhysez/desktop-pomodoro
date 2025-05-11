@@ -10,6 +10,7 @@ public class Pomodoro {
     private int longBreakDuration;
     private int currentDuration;
     private boolean running;
+    private AtomicInteger focusPeriodIndex;
 
     public Pomodoro(ArrayList<FocusPeriod> focusPeriods) {
         this.focusPeriods = focusPeriods;
@@ -29,7 +30,6 @@ public class Pomodoro {
 
                 if (Pomodoro.this.getCurrentDuration() > 0) {
                     focusPeriod.setSeconds(focusPeriod.getSeconds() - 1);
-                    System.out.println(Pomodoro.this.getCurrentDuration() + " seconds remaining in focus period");
                 } else {
                     if (currentFocusPeriodIndex.get() == focusPeriods.size() - 1) {
                         timer.cancel();
@@ -86,5 +86,17 @@ public class Pomodoro {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public AtomicInteger getFocusPeriodIndex() {
+        return focusPeriodIndex;
+    }
+
+    public void setFocusPeriodIndex(AtomicInteger focusPeriodIndex) {
+        this.focusPeriodIndex = focusPeriodIndex;
+    }
+
+    public void incrementFocusPeriodIndex() {
+        this.focusPeriodIndex.incrementAndGet();
     }
 }

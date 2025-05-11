@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Pomodoro {
     private ArrayList<FocusPeriod> focusPeriods;
     private int shortBreakDuration;
     private int longBreakDuration;
+
     public Pomodoro(ArrayList<FocusPeriod> focusPeriods) {
         this.focusPeriods = focusPeriods;
     }
@@ -13,18 +15,19 @@ public class Pomodoro {
     public void startPomodoroTimer() {
         Timer timer = new Timer();
         ArrayList<FocusPeriod> focusPeriods = this.focusPeriods;
+        AtomicInteger currentFocusPeriodIndex = new AtomicInteger(0);
 
         TimerTask timerTask = new TimerTask() {
-            FocusPeriod focusPeriod = focusPeriods.getFirst();
-
             @Override
             public void run() {
+                FocusPeriod focusPeriod = focusPeriods.get(currentFocusPeriodIndex.get());
                 long remainingSeconds = focusPeriod.getSeconds();
+
                 if (remainingSeconds > 0) {
                     focusPeriod.setSeconds(remainingSeconds - 1);
                     System.out.println(remainingSeconds + " seconds remaining in focus period");
                 } else {
-                    timer.cancel();
+                    currentFocusPeriodIndex.incrementAndGet();
                 }
             }
         };

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class AppWindow extends JFrame {
     // Globals.
     ArrayList<FocusPeriod> focusPeriods = new ArrayList<FocusPeriod>() {{
-        add(new FocusPeriod(60 * 25));
-        add(new FocusPeriod(60 * 25));
-        add(new FocusPeriod(60 * 25));
-        add(new FocusPeriod(60 * 25));
+        add(new FocusPeriod(5));
+        add(new FocusPeriod(5));
+        add(new FocusPeriod(10));
+        add(new FocusPeriod(15));
     }};
 
     Pomodoro pomodoro = new Pomodoro(focusPeriods);

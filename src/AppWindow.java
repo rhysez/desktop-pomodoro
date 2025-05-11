@@ -1,13 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class AppFrame extends JFrame {
-    // Global button declarations.
+public class AppWindow extends JFrame {
+    // Globals.
+    ArrayList<FocusPeriod> focusPeriods = new ArrayList<FocusPeriod>() {{
+        add(new FocusPeriod(60 * 25));
+        add(new FocusPeriod(60 * 25));
+        add(new FocusPeriod(60 * 25));
+        add(new FocusPeriod(60 * 25));
+    }};
+
+    Pomodoro pomodoro = new Pomodoro(focusPeriods);
+
     JButton startGenericPomodoroButton = new JButton("Start Generic Pomodoro");
 
-    public AppFrame() {
+    public AppWindow() {
         this.setTitle("Flexible Pomodoro");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -34,7 +42,7 @@ public class AppFrame extends JFrame {
         startGenericPomodoroButton.setFocusable(false);
         startGenericPomodoroButton.setBackground(new Color(0x30589E));
         startGenericPomodoroButton.setForeground(Color.WHITE);
-        startGenericPomodoroButton.addActionListener(e -> System.out.println("Hello World!"));
+        startGenericPomodoroButton.addActionListener(e -> pomodoro.startPomodoroTimer());
         this.add(startGenericPomodoroButton);
     }
 }

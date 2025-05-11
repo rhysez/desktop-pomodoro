@@ -1,11 +1,19 @@
 public class FocusPeriod {
-    private final int duration;
+    private long seconds;
 
-    public FocusPeriod(int duration) {
-        this.duration = duration;
+    public FocusPeriod(long seconds) {
+        this.seconds = seconds;
     }
 
-    public int getDuration() {
-        return duration;
+    public long getSeconds() {
+        return seconds;
+    }
+
+    public long getMinutes() {
+        return seconds / 60;
+    }
+
+    public void setSeconds(long seconds) {
+        this.seconds = seconds;
     }
 }

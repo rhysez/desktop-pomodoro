@@ -8,8 +8,6 @@ public class AppWindow extends JFrame {
     ArrayList<FocusPeriod> focusPeriods = new ArrayList<FocusPeriod>() {{
         add(new FocusPeriod(5));
         add(new FocusPeriod(5));
-        add(new FocusPeriod(10));
-        add(new FocusPeriod(15));
     }};
 
     Pomodoro pomodoro = new Pomodoro(focusPeriods);
@@ -17,13 +15,15 @@ public class AppWindow extends JFrame {
     public JLabel appTitle = new JLabel("Flexible Pomodoro");
     JButton startGenericPomodoroButton = new JButton("Start Generic Pomodoro");
 
+    private Timer timer;
+
     public AppWindow() {
         this.setTitle("Flexible Pomodoro");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(800, 600);
         this.setVisible(true);
-        this.getContentPane().setBackground(new Color(0x98BBF5));
+        this.getContentPane().setBackground(new Color(0x8ADA90));
         this.setLayout(null);
 
         // The title of the application.
@@ -41,7 +41,7 @@ public class AppWindow extends JFrame {
         startGenericPomodoroButton.setVerticalAlignment(JLabel.CENTER);
         startGenericPomodoroButton.setBounds(300, 200, 200, 50);
         startGenericPomodoroButton.setFocusable(false);
-        startGenericPomodoroButton.setBackground(new Color(0x30589E));
+        startGenericPomodoroButton.setBackground(new Color(0x3F7C46));
         startGenericPomodoroButton.setForeground(Color.WHITE);
         startGenericPomodoroButton.addActionListener(e -> this.handleCounterRuntime());
         this.add(startGenericPomodoroButton);
@@ -49,8 +49,12 @@ public class AppWindow extends JFrame {
 
     public void handleCounterRuntime() {
         pomodoro.startPomodoroTimer();
-        Timer timer = new Timer(1000, (ActionEvent e) -> {
+        timer = new Timer(1000, (ActionEvent e) -> {
             appTitle.setText(Integer.toString(pomodoro.getCurrentDuration()));
+            if (!pomodoro.isRunning()) {
+                timer.stop();
+                appTitle.setText("Flexible Pomodoro");
+            }
         });
         timer.start();
     }

@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,6 +8,7 @@ public class Pomodoro {
     private ArrayList<FocusPeriod> focusPeriods;
     private int shortBreakDuration;
     private int longBreakDuration;
+    private int currentDuration;
 
     public Pomodoro(ArrayList<FocusPeriod> focusPeriods) {
         this.focusPeriods = focusPeriods;
@@ -21,11 +23,11 @@ public class Pomodoro {
             @Override
             public void run() {
                 FocusPeriod focusPeriod = focusPeriods.get(currentFocusPeriodIndex.get());
-                long remainingSeconds = focusPeriod.getSeconds();
+                Pomodoro.this.setCurrentDuration(focusPeriod.getSeconds());
 
-                if (remainingSeconds > 0) {
-                    focusPeriod.setSeconds(remainingSeconds - 1);
-                    System.out.println(remainingSeconds + " seconds remaining in focus period");
+                if (Pomodoro.this.getCurrentDuration() > 0) {
+                    focusPeriod.setSeconds(focusPeriod.getSeconds() - 1);
+                    System.out.println(Pomodoro.this.getCurrentDuration() + " seconds remaining in focus period");
                 } else {
                     currentFocusPeriodIndex.incrementAndGet();
                 }
@@ -60,5 +62,13 @@ public class Pomodoro {
 
     public void setLongBreakDuration(int seconds) {
         this.longBreakDuration = seconds;
+    }
+
+    public int getCurrentDuration() {
+        return currentDuration;
+    }
+
+    public void setCurrentDuration(int seconds) {
+        this.currentDuration = seconds;
     }
 }

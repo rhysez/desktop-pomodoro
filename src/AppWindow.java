@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class AppWindow extends JFrame {
@@ -13,6 +14,7 @@ public class AppWindow extends JFrame {
 
     Pomodoro pomodoro = new Pomodoro(focusPeriods);
 
+    public JLabel appTitle = new JLabel("Flexible Pomodoro");
     JButton startGenericPomodoroButton = new JButton("Start Generic Pomodoro");
 
     public AppWindow() {
@@ -25,7 +27,6 @@ public class AppWindow extends JFrame {
         this.setLayout(null);
 
         // The title of the application.
-        JLabel appTitle = new JLabel("Flexible Pomodoro");
         appTitle.setHorizontalTextPosition(JLabel.CENTER);
         appTitle.setHorizontalAlignment(JLabel.CENTER);
         appTitle.setVerticalAlignment(JLabel.CENTER);
@@ -42,7 +43,15 @@ public class AppWindow extends JFrame {
         startGenericPomodoroButton.setFocusable(false);
         startGenericPomodoroButton.setBackground(new Color(0x30589E));
         startGenericPomodoroButton.setForeground(Color.WHITE);
-        startGenericPomodoroButton.addActionListener(e -> pomodoro.startPomodoroTimer());
+        startGenericPomodoroButton.addActionListener(e -> this.handleCounterRuntime());
         this.add(startGenericPomodoroButton);
+    }
+
+    public void handleCounterRuntime() {
+        pomodoro.startPomodoroTimer();
+        Timer timer = new Timer(1000, (ActionEvent e) -> {
+            appTitle.setText(Integer.toString(pomodoro.getCurrentDuration()));
+        });
+        timer.start();
     }
 }

@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 public class Pomodoro {
-    private ArrayList<Interval> intervals;
+    private ArrayList<FocusPeriod> focusPeriods;
 
-    public Pomodoro(ArrayList<Interval> intervals) {
-        this.intervals = intervals;
+    public Pomodoro(ArrayList<FocusPeriod> focusPeriods) {
+        this.focusPeriods = focusPeriods;
     }
 
-    public int getIntervalsCount() {
-        return intervals.size();
+    public int getFocusPeriodsCount() {
+        return focusPeriods.size();
     }
 }
